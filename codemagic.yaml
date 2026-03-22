@@ -7,9 +7,16 @@ workflows:
       flutter: stable
 
     scripts:
-      - name: Generate Flutter project
+      - name: Clean workspace
+        script: |
+          rm -rf android ios build
+
+      - name: Create Flutter project structure
         script: |
           flutter create .
+
+      - name: Get dependencies
+        script: |
           flutter pub get
 
       - name: Build APK
