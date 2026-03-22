@@ -1,4 +1,4 @@
-workflows:
+ workflows:
   flutter-build:
     name: Flutter Build
     max_build_duration: 60
@@ -7,15 +7,15 @@ workflows:
       flutter: stable
 
     scripts:
-      - name: Clean workspace
+      - name: Clean project
         script: |
-          rm -rf android ios build
+          flutter clean
 
-      - name: Create Flutter project structure
+      - name: Create Android project
         script: |
-          flutter create .
+          flutter create --platforms=android .
 
-      - name: Get dependencies
+      - name: Install dependencies
         script: |
           flutter pub get
 
