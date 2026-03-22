@@ -1,21 +1,45 @@
- workflows:
-  flutter-build:
-    name: Flutter Build
-    max_build_duration: 60
+workflows:
+  android-build:
+    name: Android Build (Manual Flutter Init)
 
     environment:
       flutter: stable
 
     scripts:
-      - name: Clean project
+      - name: Setup fresh Flutter project
         script: |
-          flutter clean
+          rm -rf *
+          flutter create myapp
+          cd myapp
 
-      - name: Create Android project
+      - name: Replace lib code
         script: |
-          flutter create --platforms=android .
+          rm -rf lib
+          mkdir lib
+          cat > lib/main.dart << 'EOF'
+          import 'package:flutter/material.dart';
 
-      - name: Install dependencies
+          void main() {
+            runApp(const MyApp());
+          }
+
+          class MyApp extends StatelessWidget {
+            const MyApp({super.key});
+
+            @override
+            Widget build(BuildContext context) {
+              return const MaterialApp(
+                home: Scaffold(
+                  body: Center(
+                    child: Text("Tappy Arena 🚀"),
+                  ),
+                ),
+              );
+            }
+          }
+          EOF
+
+      - name: Get dependencies
         script: |
           flutter pub get
 
@@ -24,4 +48,4 @@
           flutter build apk --debug
 
     artifacts:
-      - build/app/outputs/flutter-apk/app-debug.apk
+      - myapp/build/app/outputs/flutter-apk/app-debug.apk
